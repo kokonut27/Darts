@@ -4,37 +4,17 @@ from tkinter import messagebox
 from tkinter import Button
 from tkinter import Text
 import time
-import sqlite3
 import os
+from replit import db
 
-def get_board():
-    conn = sqlite3.connect('database.db')
-    cur = conn.cursor()
-    a = []
-    num_max = 0
-    for row in cur.execute('SELECT * FROM leaderboard ORDER BY score'):
-      num_max+=1
-      if num_max == 5:
-        break
-      else:
-        a.append(row)
-    return '\n\n'.join(map(lambda x: str(x[0]) + ' ' + str(x[1]), a))
-
-# print(get_board())
-
-def add_leader(username2, score2):
-  conn = sqlite3.connect('database.db')
-  conn.execute("INSERT INTO leaderboard (username, score) VALUES (?, ?)", (username2, score2))
-  conn.commit()
-  conn.close()
 
 def show_board():
-  board = get_board()
+  board = None
   messagebox.showinfo("Leaderboard", board)
 
 score = 0
 darts = 10
-direction = 2
+direction = 3
 xvel = 0
 
 def moveDart(event):
