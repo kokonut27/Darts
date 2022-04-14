@@ -3,13 +3,31 @@ from tkinter import font
 from tkinter import messagebox
 from tkinter import Button
 from tkinter import Text
+from replit import db
 import time
 import os
-from replit import db
 
+# setup user database for leaderboard
+if (db[os.environ["REPL_OWNER"]]): pass
+else: db[os.environ["REPL_OWNER"]] = []
+# db["top_scores"] = []
+
+def add_leader(score_):
+  db[os.environ["REPL_OWNER"]].append(score_)
+  db[os.environ["REPL_OWNER"]] = sorted(list(db[os.environ["REPL_OWNER"]]), reverse=True)
+  
+  for username in db.keys():
+    top_scores = db["top_scores"]
+    top_scores.append(db[username][0])
+    sorted(list(top_scores), reverse=True)
+
+def get_board():
+  return db["top_scores"][:4]
+
+print(get_board())
 
 def show_board():
-  board = None
+  board = get_board()
   messagebox.showinfo("Leaderboard", board)
 
 score = 0
@@ -67,7 +85,7 @@ while True:
     if darts == 0:
       gameOver = canvas.create_text(300,150, text="GAME OVER", font = titleFont)
       finalScore = canvas.create_text(300,180, text = f"Your score was: {score}", font = scoreFont)
-      add_leader(os.environ["REPL_OWNER"], score)
+      add_leader(score)
       tk.update()
       time.sleep(3)
       break

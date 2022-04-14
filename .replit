@@ -1,1 +1,1 @@
-run = "python3 darts.py"
+run = "python darts.py"
